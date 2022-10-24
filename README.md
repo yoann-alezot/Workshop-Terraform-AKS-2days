@@ -119,4 +119,5 @@ sudo apt-get update && sudo apt-get install terraform
 - kubectl -> https://kubernetes.io/docs/tasks/tools/#kubectl
 - Visual Studio Code -> https://code.visualstudio.com
 - Extension Terraform pour VSCode -> Depuis le bash, exécuter « code . » et aller chercher l’extension « Hashicorp Terraform »
+- Extension WSL pour VSCode -> https://code.visualstudio.com/docs/remote/wsl-tutorial
 
