@@ -40,7 +40,7 @@ jobs:
       - name: Terraform Plan
         run: |
           cd ./Terraform/Lab4_Pipeline_CI_CD_Terraform
-          terraform plan -var ''=${{ inputs.env}} -var 'AzureSubscriptionID=${{ secrets.SUBSCRIPTIONID }}' -var 'AzureClientSecret=${{ secrets.CLIENTSECRET }}' -var 'AzureClientID=${{ secrets.CLIENTID }}' -var 'AzureTenandID=${{ secrets.TENANTID }}' -lock=false -out=monplan.tfplan
+          terraform plan -var 'environnement=${{ inputs.env}}' -var 'AzureSubscriptionID=${{ secrets.SUBSCRIPTIONID }}' -var 'AzureClientSecret=${{ secrets.CLIENTSECRET }}' -var 'AzureClientID=${{ secrets.CLIENTID }}' -var 'AzureTenandID=${{ secrets.TENANTID }}' -lock=false -out=monplan.tfplan
               
       # apply a execution plan https://www.terraform.io/cli/commands/apply      
       - name: Terraform Apply
