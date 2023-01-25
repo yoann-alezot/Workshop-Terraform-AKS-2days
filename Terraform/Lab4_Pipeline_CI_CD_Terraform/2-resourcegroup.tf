@@ -8,6 +8,26 @@
 #                                                                                                     |_|    
 
 # cf. https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group
+resource "azure_resource_group" "RG-Name"{
+  name = "${join(["asiweursgscb",var.environnement,"01"])"
+  location = var.azureRegion
+}
+
+resource "azurerm_storage_account" "Terra-Storage-Backend" {
+  name                      = "${join(["asiweustoscb",var.environnement,"1z"])"
+  resource_group_name       = azurerm_resource_group.Terra_tfbackend_rg.name
+  location                  = azurerm_resource_group.Terra_tfbackend_rg.location
+  account_tier              = "Standard"
+  account_replication_type  = "GRS"
+  account_kind              = "StorageV2"
+  enable_https_traffic_only = true
+
+  tags = {
+    environment = "lab"
+  }
+}
+
+##################################################################################################################
 resource "azure_resource_group" "RG-DEV"{
   name = "asiweursgscbd01"
   location = var.azureRegion
