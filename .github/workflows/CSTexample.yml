@@ -8,11 +8,15 @@ on:
             description: "Environment to deploy"
             default: "DEV"
             type: "string"
+            options:
+              - DEV
+              - QA
+              - PROD
 jobs:
 
   Build-Terraform:
     runs-on: ubuntu-latest
-
+    
     steps:
 
       - name: Checks-out du repository
@@ -37,10 +41,25 @@ jobs:
           terraform validate
 
       # Generates an execution plan for Terraform with tfplan file https://www.terraform.io/cli/commands/plan
-      - name: Terraform Plan
+      #- name: Terraform Plan
+        #run: |
+          #cd ./Terraform/Lab4_Pipeline_CI_CD_Terraform
+          #terraform plan -var 'environnement=${{ inputs.env}}' -var 'AzureSubscriptionID=${{ secrets.SUBSCRIPTIONID }}' -var 'AzureClientSecret=${{ secrets.CLIENTSECRET }}' -var 'AzureClientID=${{ secrets.CLIENTID }}' -var 'AzureTenandID=${{ secrets.TENANTID }}' -lock=false -out=monplan.tfplan
+      - name: Terraform Plan DEV
+        if: ${{ inputs.env == 'DEV' }}
         run: |
           cd ./Terraform/Lab4_Pipeline_CI_CD_Terraform
-          terraform plan -var 'environnement=${{ inputs.env}}' -var 'AzureSubscriptionID=${{ secrets.SUBSCRIPTIONID }}' -var 'AzureClientSecret=${{ secrets.CLIENTSECRET }}' -var 'AzureClientID=${{ secrets.CLIENTID }}' -var 'AzureTenandID=${{ secrets.TENANTID }}' -lock=false -out=monplan.tfplan
+          terraform plan -var 'environnement=d' -var 'AzureSubscriptionID=${{ secrets.SUBSCRIPTIONID }}' -var 'AzureClientSecret=${{ secrets.CLIENTSECRET }}' -var 'AzureClientID=${{ secrets.CLIENTID }}' -var 'AzureTenandID=${{ secrets.TENANTID }}' -lock=false -out=monplan.tfplan
+      - name: Terraform Plan QA
+        if: ${{ inputs.env == 'QA' }}
+        run: |
+          cd ./Terraform/Lab4_Pipeline_CI_CD_Terraform
+          terraform plan -var 'environnement=q' -var 'AzureSubscriptionID=${{ secrets.SUBSCRIPTIONID }}' -var 'AzureClientSecret=${{ secrets.CLIENTSECRET }}' -var 'AzureClientID=${{ secrets.CLIENTID }}' -var 'AzureTenandID=${{ secrets.TENANTID }}' -lock=false -out=monplan.tfplan
+      - name: Terraform Plan PROD 
+        if: ${{ inputs.env == 'PROD' }}
+        run: |
+          cd ./Terraform/Lab4_Pipeline_CI_CD_Terraform
+          terraform plan -var 'environnement=p' -var 'AzureSubscriptionID=${{ secrets.SUBSCRIPTIONID }}' -var 'AzureClientSecret=${{ secrets.CLIENTSECRET }}' -var 'AzureClientID=${{ secrets.CLIENTID }}' -var 'AzureTenandID=${{ secrets.TENANTID }}' -lock=false -out=monplan.tfplan
               
       # apply a execution plan https://www.terraform.io/cli/commands/apply      
       - name: Terraform Apply
