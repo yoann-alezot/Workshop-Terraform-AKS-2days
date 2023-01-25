@@ -8,10 +8,33 @@
 #                                                                                                     |_|    
 
 # cf. https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group
-resource "azurerm_resource_group" "Terra_tfbackend_rg" {
-  name     = var.resourceGroupName
+resource "azure_resource_group" "RG-DEV"{
+  name = "asiweursgscbd01"
   location = var.azureRegion
+}
+
+resource "azure_resource_group" "RG-PROD"{
+  name = "asiweursgscbp01"
+  location = var.azureRegion
+}
+
+resource "azurerm_storage_account" "Terra-Storage-Backend" {
+  name                      = "${var.environnement == "PROD" ? "asiweustoscbp1z" : "asiweustoscbd1z"}"
+  resource_group_name       = "${var.environnement == "PROD" ? azure_resource_group.RG-PROD.name : azure_resource_group.RG-DEV.name}"
+  location                  = azurerm_resource_group.Terra_tfbackend_rg.location
+  account_tier              = "Standard"
+  account_replication_type  = "GRS"
+  account_kind              = "StorageV2"
+  enable_https_traffic_only = true
+
   tags = {
-    owner = "yoann.alezot"
+    environment = "lab"
   }
+}
+
+
+resource "azurerm_storage_container" "Terra-Container-Storage" {
+  name                  = "tfstate"
+  storage_account_name  = azurerm_storage_account.Terra-Storage-Backend.name
+  container_access_type = "private"
 }
