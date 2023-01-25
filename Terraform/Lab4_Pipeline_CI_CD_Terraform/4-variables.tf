@@ -12,6 +12,10 @@ variable "resourceGroupName" {
   default = "RG-DemoGitHub-Yoann"
 }
 
+variable "environnement" {
+  type    = string
+  default = "DEV"
+}
 
 # Variables pour l'authentification du provider Terraform  
 variable "AzureSubscriptionID" {
