@@ -7,7 +7,7 @@ on:
           env:
             description: "Environment to deploy"
             default: "DEV"
-            type: "string"
+            type: choice
             options:
               - DEV
               - QA
